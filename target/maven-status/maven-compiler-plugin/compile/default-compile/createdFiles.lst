@@ -1,0 +1,8 @@
+com\mycompany\sistemareservas\HistorialMedico.class
+com\mycompany\sistemareservas\Medico.class
+com\mycompany\sistemareservas\Cita.class
+com\mycompany\sistemareservas\HorarioDisponible.class
+com\mycompany\sistemareservas\Especialidades.class
+com\mycompany\sistemareservas\Paciente.class
+com\mycompany\sistemareservas\Factura.class
+com\mycompany\sistemareservas\SistemaReservas.class

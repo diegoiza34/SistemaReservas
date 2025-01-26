@@ -20,6 +20,10 @@ public class HorarioDisponible {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
     }
+    public void setHorarioDisponible(String horaInicio, String horaFin) {
+    this.horaInicio = horaInicio;
+    this.horaFin = horaFin;
+}
 
     public List<String> verDisponibilidad() {
         // Implementar lógica para devolver la disponibilidad
@@ -36,3 +40,4 @@ public class HorarioDisponible {
         return false;
     }
 }
+
