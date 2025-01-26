@@ -24,7 +24,7 @@ public class Cita {
    private boolean estadoCita;
    
    /** @pdRoleInfo migr=no name=Paciente assc=association7 coll=java.util.Collection impl=java.util.HashSet mult=1..* */
-   public java.util.Collection<Paciente> paciente;
+   private Paciente paciente;
    /** @pdRoleInfo migr=no name=Factura assc=association9 mult=1..1 */
    public Factura factura;
    /** @pdRoleInfo migr=no name=HistorialMedico assc=association11 coll=java.util.Collection impl=java.util.HashSet mult=1..* */
@@ -41,7 +41,7 @@ public class Cita {
    public Cita(String fechaHorario, boolean estadoCita) {
       this.fechaHorario = fechaHorario;
       this.estadoCita = estadoCita;
-      this.paciente = new HashSet<>();
+      this.paciente = paciente;
       this.historialMedico = new HashSet<>();
       this.horarioDisponible = new HashSet<>();
       this.medico = new HashSet<>();
@@ -83,11 +83,9 @@ public class Cita {
    }
    
    /** @pdGenerated default getter */
-   public java.util.Collection<Paciente> getPaciente() {
-      if (paciente == null)
-         paciente = new java.util.HashSet<Paciente>();
-      return paciente;
-   }
+public Paciente getPaciente() {
+    return paciente;
+}
    
    /** @pdGenerated default setter
      * @param newPaciente */
@@ -97,27 +95,22 @@ public class Cita {
          addPaciente(p);
    }
    
-   /** @pdGenerated default add
-     * @param newPaciente */
-   public void addPaciente(Paciente newPaciente) {
-      if (newPaciente == null)
-         return;
-      if (this.paciente == null)
-         this.paciente = new java.util.HashSet<Paciente>();
-      if (!this.paciente.contains(newPaciente)) {
-         this.paciente.add(newPaciente);
-      }
-   }
+ /** @pdGenerated default add
+ * @param newPaciente */
+public void addPaciente(Paciente newPaciente) {
+    if (newPaciente == null)
+        return;
+    this.paciente = newPaciente; // Asigna el nuevo paciente
+}
+
    
-   /** @pdGenerated default remove
-     * @param oldPaciente */
-   public void removePaciente(Paciente oldPaciente) {
-      if (oldPaciente == null)
-         return;
-      if (this.paciente != null && this.paciente.contains(oldPaciente)) {
-         this.paciente.remove(oldPaciente);
-      }
-   }
+  /** @pdGenerated default remove
+ * @param oldPaciente */
+public void removePaciente(Paciente oldPaciente) {
+    if (oldPaciente == null || !oldPaciente.equals(this.paciente))
+        return;
+    this.paciente = null; // Elimina el paciente
+}
    
    /** @pdGenerated default removeAll */
    public void removeAllPaciente() {
@@ -192,6 +185,10 @@ public class Cita {
 
     void removeHorarioDisponible(HorarioDisponible aThis) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    Object getIdCita() {
+        return idCita; // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     

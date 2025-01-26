@@ -138,4 +138,9 @@ public class Paciente {
          }
       }
    }
+
+   public String getIdCedula() {
+    return idCedula;
+}
+
 }
