@@ -5,17 +5,15 @@
 package com.mycompany.sistemareservas;
 
 /**
- *
- * @author Home
+ * Clase que representa un Paciente.
  */
+import java.util.*;
 
-        /***********************************************************************
+/***********************************************************************
  * Module:  Paciente.java
  * Author:  Home
  * Purpose: Defines the Class Paciente
  ***********************************************************************/
-
-import java.util.*;
 
 /** @pdOid 462b0f13-3fc8-4d24-b7f9-2c5d945552e0 */
 public class Paciente {
@@ -31,11 +29,15 @@ public class Paciente {
    private String genero;
    
    /** @pdRoleInfo migr=no name=HistorialMedico assc=association4 coll=java.util.Collection impl=java.util.HashSet mult=0..* type=Composition */
-   public java.util.Collection<HistorialMedico> historialMedico;
+   private HistorialMedico[] historialMedico;
+   private int historialCount;
+   
    /** @pdRoleInfo migr=no name=HorarioDisponible assc=association13 mult=1..1 */
    public HorarioDisponible horarioDisponible;
+   
    /** @pdRoleInfo migr=no name=Cita assc=association7 coll=java.util.Collection impl=java.util.HashSet mult=1 side=A */
-   public java.util.Collection<Cita> cita;
+   private Cita[] citas;
+   private int citasCount;
    
    /** @pdOid 98403a5d-dbf5-4585-ad3b-3886099a5789 */
    public void actualizarDatos(String idCedula, String nombre, String direccion, String telefono, String genero) {
@@ -58,6 +60,13 @@ public class Paciente {
       this.direccion = direccion;
       this.telefono = telefono;
       this.genero = genero;
+      
+      // Inicialización de los arreglos
+      this.historialMedico = new HistorialMedico[10]; // Tamaño máximo de 10 por ejemplo
+      this.historialCount = 0;
+      
+      this.citas = new Cita[10]; // Tamaño máximo de 10 por ejemplo
+      this.citasCount = 0;
    }
    
    /** @pdOid 291341d1-082b-4883-9d7f-6e20e86dec22 */
@@ -80,67 +89,123 @@ public class Paciente {
       this.genero = null;
    }
    
-   
    /** @pdGenerated default getter */
-   public java.util.Collection<HistorialMedico> getHistorialMedico() {
-      if (historialMedico == null)
-         historialMedico = new java.util.HashSet<HistorialMedico>();
+   public HistorialMedico[] getHistorialMedico() {
       return historialMedico;
-   }
-   
-   /** @pdGenerated default iterator getter */
-   public java.util.Iterator<HistorialMedico> getIteratorHistorialMedico() {
-      if (historialMedico == null)
-         historialMedico = new java.util.HashSet<HistorialMedico>();
-      return historialMedico.iterator();
    }
    
    /** @pdGenerated default setter
      * @param newHistorialMedico */
-   public void setHistorialMedico(java.util.Collection<HistorialMedico> newHistorialMedico) {
+   public void setHistorialMedico(HistorialMedico[] newHistorialMedico) {
       removeAllHistorialMedico();
-      for (java.util.Iterator<HistorialMedico> iter = newHistorialMedico.iterator(); iter.hasNext();)
-         addHistorialMedico(iter.next());
+      for (int i = 0; i < newHistorialMedico.length; i++) {
+         addHistorialMedico(newHistorialMedico[i]);
+      }
    }
    
    /** @pdGenerated default add
      * @param newHistorialMedico */
    public void addHistorialMedico(HistorialMedico newHistorialMedico) {
-      if (newHistorialMedico == null)
-         return;
-      if (this.historialMedico == null)
-         this.historialMedico = new java.util.HashSet<HistorialMedico>();
-      if (!this.historialMedico.contains(newHistorialMedico)) {
-         this.historialMedico.add(newHistorialMedico);
-         newHistorialMedico.setPaciente(this);      
+      if (historialCount < historialMedico.length) {
+         historialMedico[historialCount++] = newHistorialMedico;
+      } else {
+         System.out.println("No se pueden agregar más historiales médicos.");
       }
    }
    
    /** @pdGenerated default remove
      * @param oldHistorialMedico */
    public void removeHistorialMedico(HistorialMedico oldHistorialMedico) {
-      if (oldHistorialMedico == null)
-         return;
-      if (this.historialMedico != null && this.historialMedico.contains(oldHistorialMedico)) {
-         this.historialMedico.remove(oldHistorialMedico);
-         oldHistorialMedico.setPaciente(null);
+      for (int i = 0; i < historialCount; i++) {
+         if (historialMedico[i].equals(oldHistorialMedico)) {
+            for (int j = i; j < historialCount - 1; j++) {
+               historialMedico[j] = historialMedico[j + 1];
+            }
+            historialMedico[--historialCount] = null;
+            break;
+         }
       }
    }
    
    /** @pdGenerated default removeAll */
    public void removeAllHistorialMedico() {
-      if (historialMedico != null) {
-         HistorialMedico oldHistorialMedico;
-         for (java.util.Iterator<HistorialMedico> iter = getIteratorHistorialMedico(); iter.hasNext();) {
-            oldHistorialMedico = iter.next();
-            iter.remove();
-            oldHistorialMedico.setPaciente(null);
+      for (int i = 0; i < historialCount; i++) {
+         historialMedico[i] = null;
+      }
+      historialCount = 0;
+   }
+
+   /** @pdGenerated default getter */
+   public Cita[] getCitas() {
+      return citas;
+   }
+
+   /** @pdGenerated default setter */
+   public void setCitas(Cita[] newCitas) {
+      removeAllCitas();
+      for (int i = 0; i < newCitas.length; i++) {
+         addCita(newCitas[i]);
+      }
+   }
+
+   /** @pdGenerated default add
+     * @param newCita */
+   public void addCita(Cita newCita) {
+      if (citasCount < citas.length) {
+         citas[citasCount++] = newCita;
+      } else {
+         System.out.println("No se pueden agregar más citas.");
+      }
+   }
+
+   /** @pdGenerated default remove
+     * @param oldCita */
+   public void removeCita(Cita oldCita) {
+      for (int i = 0; i < citasCount; i++) {
+         if (citas[i].equals(oldCita)) {
+            for (int j = i; j < citasCount - 1; j++) {
+               citas[j] = citas[j + 1];
+            }
+            citas[--citasCount] = null;
+            break;
          }
       }
    }
 
-   public String getIdCedula() {
-    return idCedula;
-}
+   /** @pdGenerated default removeAll */
+   public void removeAllCitas() {
+      for (int i = 0; i < citasCount; i++) {
+         citas[i] = null;
+      }
+      citasCount = 0;
+   }
 
+   public String getIdCedula() {
+      return idCedula;
+   }
+
+   // Método para mostrar el historial médico
+   public void mostrarHistorialMedico() {
+      for (int i = 0; i < historialCount; i++) {
+         System.out.println(historialMedico[i].toString());
+      }
+   }
+
+   // Método para mostrar las citas
+   public void mostrarCitas() {
+      for (int i = 0; i < citasCount; i++) {
+         System.out.println(citas[i].toString());
+      }
+   }
+
+   @Override
+   public String toString() {
+      return "Paciente{" +
+            "idCedula='" + idCedula + '\'' +
+            ", nombre='" + nombre + '\'' +
+            ", direccion='" + direccion + '\'' +
+            ", telefono='" + telefono + '\'' +
+            ", genero='" + genero + '\'' +
+            '}';
+   }
 }

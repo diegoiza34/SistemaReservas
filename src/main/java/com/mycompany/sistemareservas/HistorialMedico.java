@@ -145,23 +145,27 @@ public class HistorialMedico {
              '}';
    }
 
-    void setPaciente(Object object) {
-if (object instanceof Collection) {
-        // Verificar que el objeto es una colección
-        Collection collection = (Collection) object;
-        for (Object item : collection) {
+   /**
+    * Maneja la adición de un paciente o una colección de pacientes.
+    * 
+    * @param object Paciente o una colección de Pacientes a agregar.
+    */
+   public void setPaciente(Object object) {
+      if (object instanceof Collection) {
+         // Verificar que el objeto es una colección
+         Collection<?> collection = (Collection<?>) object;
+         for (Object item : collection) {
             if (item instanceof Paciente) {
-                addPaciente((Paciente) item);
+               addPaciente((Paciente) item);
             } else {
                 throw new IllegalArgumentException("La colección contiene elementos que no son instancias de Paciente");
             }
-        }
-    } else if (object instanceof Paciente) {
-        // Si el objeto es una única instancia de Paciente
-        addPaciente((Paciente) object);
-    } else {
-        throw new IllegalArgumentException("El objeto debe ser un Paciente o una colección de Pacientes");
-    }
-}
-
+         }
+      } else if (object instanceof Paciente) {
+         // Si el objeto es una única instancia de Paciente
+         addPaciente((Paciente) object);
+      } else {
+         throw new IllegalArgumentException("El objeto debe ser un Paciente o una colección de Pacientes");
+      }
+   }
 }

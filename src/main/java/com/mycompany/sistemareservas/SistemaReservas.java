@@ -1,25 +1,35 @@
+
 package com.mycompany.sistemareservas;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class SistemaReservas {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         List<Paciente> pacientes = new ArrayList<>();
         List<Cita> citas = new ArrayList<>();
+        List<Medico> medicos = new ArrayList<>(); // Lista de médicos
+        List<Especialidades> especialidades = new ArrayList<>(); // Lista de especialidades
+
+        // Agregar algunos médicos y especialidades de ejemplo
+        especialidades.add(new Especialidades("Pediatría", 100.0));
+        especialidades.add(new Especialidades("Cardiología", 150.0));
 
         // Menú de opciones
         while (true) {
             System.out.println("Sistema de Reservas");
             System.out.println("1. Ver pacientes");
             System.out.println("2. Agregar paciente");
-            System.out.println("3. Agendar cita");
-            System.out.println("4. Modificar cita");
-            System.out.println("5. Eliminar cita");
-            System.out.println("6. Eliminar paciente");
-            System.out.println("7. Salir");
+            System.out.println("3. Agregar médico");
+            System.out.println("4. Agendar cita");
+            System.out.println("5. Modificar cita");
+            System.out.println("6. Eliminar cita");
+            System.out.println("7. Eliminar paciente");
+            System.out.println("8. Ver citas agendadas");
+            System.out.println("9. Salir");
             System.out.print("Selecciona una opción: ");
             int opcion = scanner.nextInt();
 
@@ -62,6 +72,47 @@ public class SistemaReservas {
                 }
 
                 case 3 -> {
+                    // Agregar médico
+                    System.out.print("Ingresa el ID del médico: ");
+                    String idMedico = scanner.next();
+                    scanner.nextLine(); // Consumir el salto de línea
+
+                    System.out.print("Ingresa el nombre del médico: ");
+                    String nombreMedico = scanner.nextLine();
+
+                    // Mostrar especialidades
+                    System.out.println("Selecciona una especialidad:");
+                    for (int i = 0; i < especialidades.size(); i++) {
+                        System.out.println((i + 1) + ". " + especialidades.get(i).getNombre());
+                    }
+                    int especialidadSeleccionada = scanner.nextInt() - 1;
+
+                    // Crear el nuevo médico con la especialidad seleccionada
+                    Medico nuevoMedico = new Medico(idMedico, nombreMedico, especialidades.get(especialidadSeleccionada));
+                    medicos.add(nuevoMedico);
+                    System.out.println("Médico agregado exitosamente.");
+
+                    // Agregar horarios únicos para el médico
+                    System.out.print("¿Cuántos horarios deseas agregar para el médico? ");
+                    int numHorarios = scanner.nextInt();
+                    scanner.nextLine(); // Consumir el salto de línea
+
+                    for (int i = 0; i < numHorarios; i++) {
+                        System.out.print("Ingresa el día del horario (por ejemplo, Lunes): ");
+                        String dia = scanner.nextLine();
+
+                        System.out.print("Ingresa la hora de inicio (por ejemplo, 9:00 AM): ");
+                        String horaInicio = scanner.nextLine();
+
+                        System.out.print("Ingresa la hora de fin (por ejemplo, 10:00 AM): ");
+                        String horaFin = scanner.nextLine();
+                        HorarioDisponible nuevoHorario = new HorarioDisponible(horaInicio, horaFin);
+                        nuevoHorario.setDia(dia); // Asignar el día al horario
+                        nuevoMedico.addHorario(nuevoHorario);
+                    }
+                }
+
+                case 4 -> {
                     // Agendar cita
                     System.out.print("Selecciona el ID del paciente para agendar una cita: ");
                     String idPaciente = scanner.next();
@@ -75,6 +126,21 @@ public class SistemaReservas {
 
                     if (pacienteSeleccionado != null) {
                         System.out.println("Agendar cita para " + pacienteSeleccionado.getNombre());
+
+                        // Mostrar especialidades
+                        System.out.println("Selecciona una especialidad:");
+                        for (int i = 0; i < especialidades.size(); i++) {
+                            System.out.println((i + 1) + ". " + especialidades.get(i).getNombre());
+                        }
+                        int especialidadSeleccionada = scanner.nextInt() - 1;
+
+                        // Mostrar médicos disponibles
+                        System.out.println("Selecciona un médico:");
+                        for (int i = 0; i < medicos.size(); i++) {
+                            System.out.println((i + 1) + ". " + medicos.get(i).getNombre());
+                        }
+                        int medicoSeleccionado = scanner.nextInt() - 1;
+
                         // Mostrar horarios disponibles
                         System.out.println("1. 9:00 AM");
                         System.out.println("2. 10:00 AM");
@@ -83,8 +149,11 @@ public class SistemaReservas {
 
                         // Crear una nueva cita
                         String fechaHora = horario == 1 ? "2025-01-26 09:00 AM" : "2025-01-26 10:00 AM";
-                        Cita nuevaCita = new Cita(fechaHora, true, "123456"); // Fecha y hora de la cita
-                        nuevaCita.addPaciente(pacienteSeleccionado);
+                        Cita nuevaCita = new Cita(fechaHora, true, "C" + (citas.size() + 1)); // ID de cita
+                        nuevaCita.setPaciente(pacienteSeleccionado);
+                        
+                        // Asignar médico a la cita
+                        nuevaCita.addMedico(medicos.get(medicoSeleccionado));
 
                         // Crear y agregar horario disponible a la cita
                         HorarioDisponible nuevoHorario = new HorarioDisponible("9:00 AM", "10:00 AM");
@@ -98,7 +167,7 @@ public class SistemaReservas {
                     }
                 }
 
-                case 4 -> {
+                case 5 -> {
                     // Modificar cita
                     System.out.print("Introduce el ID de la cita a modificar: ");
                     String idCita = scanner.next();
@@ -111,7 +180,7 @@ public class SistemaReservas {
                     }
 
                     if (citaModificar != null) {
-                        System.out.println("Modificar cita para " + citaModificar.paciente.getNombre());
+                        System.out.println("Modificar cita para " + citaModificar.getPaciente().getNombre());
                         // Modificar la cita (como cambiar el horario)
                         System.out.println("Nuevo horario:");
                         System.out.println("1. 9:00 AM");
@@ -142,7 +211,7 @@ public class SistemaReservas {
 
                         // Ahora actualizamos el horario de la cita
                         HorarioDisponible horario = new HorarioDisponible(horarioSeleccionado, horarioSeleccionado);
-                        citaModificar.setHorario(horario); // Asignamos el nuevo horario a la cita
+                        citaModificar.addHorarioDisponible(horario); // Asignamos el nuevo horario a la cita
 
                         System.out.println("La cita ha sido modificada con el nuevo horario: " + horarioSeleccionado);
                     } else {
@@ -150,7 +219,7 @@ public class SistemaReservas {
                     }
                 }
 
-                case 5 -> {
+                              case 6 -> {
                     // Eliminar cita
                     System.out.print("Introduce el ID de la cita a eliminar: ");
                     String idCitaEliminar = scanner.next();
@@ -170,7 +239,7 @@ public class SistemaReservas {
                     }
                 }
 
-                case 6 -> {
+                case 7 -> {
                     // Eliminar paciente
                     System.out.print("Introduce el ID del paciente a eliminar: ");
                     String idPacienteEliminar = scanner.next();
@@ -190,7 +259,20 @@ public class SistemaReservas {
                     }
                 }
 
-                case 7 -> {
+                case 8 -> {
+                    // Ver citas agendadas
+                    if (citas.isEmpty()) {
+                        System.out.println("No hay citas agendadas.");
+                    } else {
+                        System.out.println("Citas agendadas:");
+                        for (Cita c : citas) {
+                            System.out.println("ID Cita: " + c.getIdCita() + " | Paciente: " + c.getPaciente().getNombre() +
+                                    " | Fecha y Hora: " + c.getFechaHorario() + " | Médico: " + c.getMedico()[0].getNombre());
+                        }
+                    }
+                }
+
+                case 9 -> {
                     // Salir
                     System.out.println("¡Hasta luego!");
                     scanner.close();
@@ -201,4 +283,4 @@ public class SistemaReservas {
             }
         }
     }
-}
+} 
