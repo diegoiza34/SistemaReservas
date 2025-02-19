@@ -7,7 +7,8 @@ package com.mycompany.sistemareservas;
 /**
  * Clase que representa un Paciente.
  */
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /***********************************************************************
  * Module:  Paciente.java
@@ -17,13 +18,14 @@ import java.util.*;
 
 /** @pdOid 462b0f13-3fc8-4d24-b7f9-2c5d945552e0 */
 
+
 public class Paciente {
     private String idCedula;
     private String nombre;
     private String direccion;
     private String telefono;
     private String genero;
-    private List<HistorialMedico> historialesMedicos; // Lista de historiales médicos
+    private List<HistorialMedico> historialesMedicos;
 
     public Paciente(String idCedula, String nombre, String direccion, String telefono, String genero) {
         this.idCedula = idCedula;
@@ -31,10 +33,9 @@ public class Paciente {
         this.direccion = direccion;
         this.telefono = telefono;
         this.genero = genero;
-        this.historialesMedicos = new ArrayList<>(); // Inicializa la lista de historiales médicos
+        this.historialesMedicos = new ArrayList<>();
     }
 
-    // Getters y Setters
     public String getIdCedula() {
         return idCedula;
     }
@@ -44,25 +45,10 @@ public class Paciente {
     }
 
     public void addHistorialMedico(HistorialMedico historial) {
-        if (historial != null && !historialesMedicos.contains(historial)) {
-            historialesMedicos.add(historial);
-        }
-    }
-
-    public void removeHistorialMedico(HistorialMedico historial) {
-        historialesMedicos.remove(historial);
+        this.historialesMedicos.add(historial);
     }
 
     public List<HistorialMedico> getHistorialesMedicos() {
         return historialesMedicos;
-    }
-
-    @Override
-    public String toString() {
-        return "Paciente{" +
-                "idCedula='" + idCedula + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", historialesMedicos=" + historialesMedicos.size() +
-                '}';
     }
 }

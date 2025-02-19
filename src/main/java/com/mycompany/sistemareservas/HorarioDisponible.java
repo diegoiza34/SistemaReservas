@@ -4,31 +4,23 @@
  */
 package com.mycompany.sistemareservas;
 
+
 public class HorarioDisponible {
     private String horaInicio;
     private String horaFin;
-    private String dia; // Atributo para el día
+    private String dia;
 
     public HorarioDisponible(String horaInicio, String horaFin) {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
     }
 
-    // Getters y Setters
     public String getHoraInicio() {
         return horaInicio;
     }
 
-    public void setHoraInicio(String horaInicio) {
-        this.horaInicio = horaInicio;
-    }
-
     public String getHoraFin() {
         return horaFin;
-    }
-
-    public void setHoraFin(String horaFin) {
-        this.horaFin = horaFin;
     }
 
     public String getDia() {
@@ -36,15 +28,11 @@ public class HorarioDisponible {
     }
 
     public void setDia(String dia) {
-        this.dia = dia; // Método para establecer el día
+        this.dia = dia;
     }
 
     @Override
     public String toString() {
-        return "HorarioDisponible{" +
-                "horaInicio='" + horaInicio + '\'' +
-                ", horaFin='" + horaFin + '\'' +
-                ", dia='" + dia + '\'' +
-                '}';
+        return "Horario: " + dia + " " + horaInicio + " - " + horaFin;
     }
 }
